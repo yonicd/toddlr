@@ -29,3 +29,7 @@ toddlr::toddlr()
   - (Left) Barplot of frequency of type of subject making the statment by proximity to the president
   - (Right Top) Trend of cumulative frequency of statuses by proximity to the president
   - (Right Bottom) Trend of frequency of statusesby proximity to the president
+
+## Example
+
+![](https://github.com/yonicd/toddlr/blob/gif/toddlr.gif?raw=true)
