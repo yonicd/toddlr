@@ -1,6 +1,6 @@
 Package: toddlr
 Title: Toddler in Chief Twitter Thread Analytics
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: person(given = "Jonathan", family = "Sidi", role = c("aut", "cre"), email =
          "yonicd@gmail.com")
 Description: Shinyapp to analyze the Toddler in Chief Thread on Twitter by Daniel Drezner.
@@ -9,5 +9,7 @@ Imports: rtweet,ggplot2,purrr,slickR,dplyr,miniUI,shiny,patchwork
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Remotes: thomasp85/patchwork
+Remotes: 
+  thomasp85/patchwork,
+  yonicd/rtweet
 RoxygenNote: 6.1.1

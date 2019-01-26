@@ -2,26 +2,19 @@
 % Please edit documentation in R/toddlr_plots.R
 \name{toddlr_plots}
 \alias{toddlr_plots}
-\title{FUNCTION_TITLE}
+\title{Create toddlr output plot}
 \usage{
 toddlr_plots(plot_dat)
 }
 \arguments{
-\item{plot_dat}{PARAM_DESCRIPTION}
+\item{plot_dat}{list of tibbles}
 }
 \value{
-OUTPUT_DESCRIPTION
+ggplot
 }
 \description{
-FUNCTION_DESCRIPTION
+Creates dashboard of plots from thread
 }
 \details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Uses internal functions to create input list
 }

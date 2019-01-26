@@ -1,12 +1,14 @@
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param twe_dat PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
+#' @title toddlr slick
+#' @description Carousel that contains iframes with twitter embedded statuses
+#' @param twe_dat tibble that contains screen_name and status_id
+#' @param \dots arguments to pass to \code{\link[slickR]{slickR}}
+#' @return slick
 #' @examples 
 #' \dontrun{
 #' if(interactive()){
-#'  #EXAMPLE1
+#'  toc%>%
+#'  dplyr::slice(1:5)%>%
+#'  toddlr::toddlr_slick()
 #'  }
 #' }
 #' @seealso 
@@ -17,7 +19,7 @@
 #' @importFrom purrr map2_chr
 #' @importFrom rtweet tweet_embed
 #' @importFrom slickR slickR
-toddlr_slick <- function(twe_dat){
+toddlr_slick <- function(twe_dat,...){
 
   twe <- purrr::map2_chr(twe_dat$screen_name, twe_dat$status_id,
                          rtweet::tweet_embed,hide_thread = TRUE, align = 'center')
@@ -29,7 +31,6 @@ toddlr_slick <- function(twe_dat){
       autoplay=TRUE,
       vertical = TRUE,
       dots = FALSE),
-    width = '40%',
-    height = '40%')
+    ...)
 
 }

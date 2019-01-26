@@ -2,26 +2,23 @@
 % Please edit documentation in R/toddlr.R
 \name{toddlr}
 \alias{toddlr}
-\title{FUNCTION_TITLE}
+\title{Toddlr Shiny Gadget}
 \usage{
-toddlr(tw = toc)
+toddlr(tw = toddlr::toc)
 }
 \arguments{
-\item{tw}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{tw}{tibble, output from rtweet containting thread: Default: toddlr::toc}
 }
 \description{
-FUNCTION_DESCRIPTION
+Shiny gadget for interactive dashboard
 }
 \details{
-DETAILS
+Thread self updates on load with lastest tweets
 }
 \examples{
 \dontrun{
 if(interactive()){
- #EXAMPLE1
+ toddlr()
  }
 }
 }

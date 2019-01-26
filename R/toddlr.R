@@ -1,12 +1,12 @@
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param tw PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
+#' @title Toddlr Shiny Gadget
+#' @description Shiny gadget for interactive dashboard
+#' @param tw tibble, output from rtweet containting thread: Default: toddlr::toc
+#' @return NULL
+#' @details Thread self updates on load with lastest tweets
 #' @examples 
 #' \dontrun{
 #' if(interactive()){
-#'  #EXAMPLE1
+#'  toddlr()
 #'  }
 #' }
 #' @rdname toddlr
@@ -15,14 +15,14 @@
 #' @importFrom miniUI miniPage gadgetTitleBar miniTitleBarButton miniContentPanel
 #' @importFrom slickR slickROutput renderSlickR
 #' @importFrom dplyr filter left_join mutate between n count select slice
-toddlr <- function(tw = toc) {
+toddlr <- function(tw = toddlr::toc) {
   
   tw <- tw%>%tweet_threading_fw()
   
   # gadget UI ----
   ui <- miniUI::miniPage(
-    miniUI::gadgetTitleBar(title = 'toddlr: "Toddler in Chief" Thread Analytics Dashboard',
-                           left = miniUI::miniTitleBarButton("qt", "Quit")
+    miniUI::gadgetTitleBar(title = '"Toddler in Chief" Thread Analytics Dashboard',
+                           left = miniUI::miniTitleBarButton("gh", "toddlr")
     ),
     miniUI::miniContentPanel(
       shiny::sidebarLayout(
@@ -44,12 +44,24 @@ toddlr <- function(tw = toc) {
           ),
           shiny::sliderInput(
             inputId = 'slickslide',
-            label = 'Last Status to Show',
+            label = 'Last N Statuses to Show',
             min = 1,
             max = 30,
             value = 5
           ),
           slickR::slickROutput('slick'),
+          shiny::br(),
+          shiny::wellPanel(
+            shiny::radioButtons(
+              inputId      = 'dltype',
+              label        = 'Export Format',
+              choiceNames  = c('CSV','RDS'),
+              choiceValues = c('csv','rds'),
+              selected     = 'csv',
+              inline       = TRUE),
+            shiny::downloadButton('downloadData','Export Thread')
+          ),
+          
           width = 3
         ),
         mainPanel = shiny::mainPanel(
@@ -63,8 +75,12 @@ toddlr <- function(tw = toc) {
   # gadget Server -----
   server <- function(input, output, session) {
     
-    shiny::observeEvent(input$qt, {
+    shiny::observeEvent(input$done, {
       shiny::stopApp()
+    })
+    
+    shiny::observeEvent(input$gh, {
+      browseURL('https://github.com/yonicd/toddlr')
     })
     
     plot_dat <- shiny::eventReactive(c(input$date,input$prox),{
@@ -78,17 +94,21 @@ toddlr <- function(tw = toc) {
         toddlr_status()%>%
         dplyr::left_join(
           tw%>%toddlr_stats(),
-        by = 'ym')
+        by = c('ym','prox'))
       
       ret_plots <- ret_plots%>%
+        dplyr::group_by(prox)%>%
         dplyr::mutate(
           now = dplyr::between(
             x = as.Date(sprintf('%s-01',ym),format = '%Y-%m-%d'),
             left = as.Date(sprintf('%s-01',strftime(input$date[1],'%Y-%m')),format = '%Y-%m-%d'),
             right = as.Date(sprintf('%s-01',strftime(input$date[2],'%Y-%m')),format = '%Y-%m-%d')
           ),
-          nn=cumsum(n),
-          i = 1:dplyr::n()
+          nn=cumsum(n)
+        )%>%
+        dplyr::ungroup()%>%
+        dplyr::mutate(
+          i = as.numeric(as.factor(ym))
         )
       
       ret_filter <- tw%>%
@@ -122,10 +142,26 @@ toddlr <- function(tw = toc) {
         
         all_dat$twe_dat%>%
           dplyr::slice(1:input$slickslide)%>%
-          toddlr_slick()
+          toddlr_slick(width = '40%', height = '40%')
     })
     
     })
+    
+    output$downloadData <- downloadHandler(
+      filename = function() {
+        sprintf('toddlr-data-%s.%s', Sys.Date(), input$dltype)
+      },
+      content = function(con) {
+        if(input$dltype=='csv'){
+          data_out <- tw[,!sapply(toc,inherits,what='list')]
+          write.csv(data_out, con)  
+        }else{
+          saveRDS(tw,con)
+        }
+        
+      }
+    )
+    
   }
   
   # Run Gadget ----

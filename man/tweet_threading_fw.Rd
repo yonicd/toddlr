@@ -2,22 +2,22 @@
 % Please edit documentation in R/threading.R
 \name{tweet_threading_fw}
 \alias{tweet_threading_fw}
-\title{FUNCTION_TITLE}
+\title{Forward update of twitter thread}
 \usage{
 tweet_threading_fw(tw, n = 1000, ...)
 }
 \arguments{
-\item{tw}{PARAM_DESCRIPTION}
+\item{tw}{tibble, rtweet output}
 
-\item{n}{PARAM_DESCRIPTION, Default: 1000}
+\item{n}{numeric, timeline of user to fetch to look for thread elements, Default: 1000}
 
-\item{...}{PARAM_DESCRIPTION}
+\item{\dots}{Arguments to pass to \code{\link[rtweet]{get_timeline}}}
 }
 \value{
-OUTPUT_DESCRIPTION
+updated tibble, rtweet output
 }
 \description{
-FUNCTION_DESCRIPTION
+Function to update twitter thread from last status
 }
 \details{
 DETAILS
@@ -25,7 +25,7 @@ DETAILS
 \examples{
 \dontrun{
 if(interactive()){
- #EXAMPLE1
+ tweet_threading_fw(toc)
  }
 }
 }

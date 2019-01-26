@@ -2,18 +2,20 @@
 % Please edit documentation in R/toddlr_slick.R
 \name{toddlr_slick}
 \alias{toddlr_slick}
-\title{FUNCTION_TITLE}
+\title{toddlr slick}
 \usage{
-toddlr_slick(twe_dat)
+toddlr_slick(twe_dat, ...)
 }
 \arguments{
-\item{twe_dat}{PARAM_DESCRIPTION}
+\item{twe_dat}{tibble that contains screen_name and status_id}
+
+\item{\dots}{arguments to pass to \code{\link[slickR]{slickR}}}
 }
 \value{
-OUTPUT_DESCRIPTION
+slick
 }
 \description{
-FUNCTION_DESCRIPTION
+Carousel that contains iframes with twitter embedded statuses
 }
 \details{
 DETAILS
@@ -21,7 +23,9 @@ DETAILS
 \examples{
 \dontrun{
 if(interactive()){
- #EXAMPLE1
+ toc\%>\%
+ dplyr::slice(1:5)\%>\%
+ toddlr::toddlr_slick()
  }
 }
 }

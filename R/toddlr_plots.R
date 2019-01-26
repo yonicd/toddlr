@@ -1,14 +1,8 @@
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param plot_dat PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
+#' @title Create toddlr output plot
+#' @description Creates dashboard of plots from thread
+#' @param plot_dat list of tibbles
+#' @return ggplot
+#' @details Uses internal functions to create input list
 #' @rdname toddlr_plots
 #' @import patchwork
 #' @export 
@@ -31,9 +25,9 @@ toddlr_plots <- function(plot_dat){
 #' @import ggplot2
 plot_cumfreq <- function(dat){
   dat%>%
-    ggplot2::ggplot(ggplot2::aes(x=i,y=nn)) +
-    ggplot2::geom_smooth(method='loess',se=FALSE,colour='black',size=0.5) +
-    ggplot2::geom_point(ggplot2::aes(colour = now),size=2,show.legend = FALSE) +
+    ggplot2::ggplot(ggplot2::aes(x=i,y=nn,colour=prox)) +
+    ggplot2::geom_line(show.legend = FALSE,alpha=0.3) +
+    ggplot2::geom_point(show.legend = FALSE,size=0.5) +
     ggplot2::scale_x_continuous(breaks = 1:nrow(dat),labels = dat$ym) +
     ggplot2::theme_bw() +
     ggplot2::theme(
@@ -49,9 +43,9 @@ plot_cumfreq <- function(dat){
 #' @import ggplot2
 plot_freq <- function(dat){
   dat%>%
-    ggplot2::ggplot(ggplot2::aes(x=ym,y=n)) +
+    ggplot2::ggplot(ggplot2::aes(x=ym,y=n,colour=prox)) +
     ggplot2::geom_point(
-      ggplot2::aes(size = ratio ,colour = now)
+      ggplot2::aes(size = ratio)
     ) +
     ggplot2::theme_bw() +
     ggplot2::theme(
@@ -62,7 +56,7 @@ plot_freq <- function(dat){
       x = "Date",
       y = 'Statuses\n(Frequency)',
       size = 'Favorite/Retweet',
-      caption = 'Created By: @yoniceedee\nSource Script: https://goo.gl/FJJv7g'
+      caption = 'Created By: @yoniceedee\nSource Script: https://goo.gl/yo6ipg'
     ) +
     ggplot2::scale_colour_discrete(guide = 'none') 
 }
@@ -70,14 +64,16 @@ plot_freq <- function(dat){
 #' @import ggplot2
 plot_snip <- function(snips){
   snips%>%
+    dplyr::mutate(staff = ifelse(prox=='staff','Staff','Non Staff'))%>%
     ggplot2::ggplot(
       ggplot2::aes(x=whoami,y=n)
     ) +
     ggplot2::geom_bar(stat='identity',ggplot2::aes(fill = prox)) +
     ggplot2::coord_flip() +
     ggplot2::theme_bw() +
+    ggplot2::facet_wrap(~ staff,ncol = 1,scales='free') +
     ggplot2::labs(
-      title = 'Friends',
+      title = 'Who stop thinking/talking/treating about him like a toddler?',
       y = 'Frequency',
       fill = 'Circle of Trust'
     ) +
