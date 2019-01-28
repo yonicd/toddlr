@@ -73,7 +73,7 @@ plot_snip <- function(snips){
     ggplot2::theme_bw() +
     ggplot2::facet_wrap(~ staff,ncol = 1,scales='free') +
     ggplot2::labs(
-      title = 'Who stop thinking/talking/treating about him like a toddler?',
+      title = 'Who should stop thinking/talking/treating\nabout him like a toddler?',
       y = 'Frequency',
       fill = 'Circle of Trust'
     ) +

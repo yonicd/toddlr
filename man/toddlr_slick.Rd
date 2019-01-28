@@ -17,9 +17,6 @@ slick
 \description{
 Carousel that contains iframes with twitter embedded statuses
 }
-\details{
-DETAILS
-}
 \examples{
 \dontrun{
 if(interactive()){
